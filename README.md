@@ -52,3 +52,30 @@ To install and run the frontend, follow these steps:
 ## Setup Details
 
 Follow these steps to set up and run the project:
+
+1. Copy the `borderpay` folder from the repo inside the folder `fabric-samples` of Hyperledger-Fabric
+2. 
+```bash
+#To avoid any permissions problem:
+   sudo bash
+# navigate to test-network folder in fabric-samples
+
+# Start with creating channel named mychannel and setting Peer state database to deploy: couchdb with ca
+
+./network.sh up  createChannel -c mychannel -ca -s couchdb
+
+# deploying chaincodes to peers 
+
+./network.sh deployCC -ccn basictest  -ccp ../borderpay/chaincode-go  -ccl go -ccep "OR('Org1MSP.peer','Org2MSP.peer')"  -cccg '../borderpay/chaincode-go/collections_config.json' -ccep "OR('Org1MSP.peer','Org2MSP.peer')"
+
+./network.sh deployCC -ccn paytest  -ccp ../borderpay/chaincode2-go  -ccl go -ccep "OR('Org1MSP.peer','Org2MSP.peer')"  -cccg '../borderpay/chaincode2-go/collections2_config.json' -ccep "OR('Org1MSP.peer','Org2MSP.peer')"
+
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C mychannel -n paytest --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -c '{"function":"InitLedger","Args":[]}'
+
+#Start a new terminal
+
+# navigate to rest-api-go folder(run this command if you're in test-network currently)
+cd ../borderpay/rest-api-go
+# start api-server (It will start api-sever on port:3002)
+go run main.go
+   ```
