@@ -1,92 +1,54 @@
 # BorderPay.Io
 
-<h4><a id="Installation_6"></a>Installation</h4>
-<p>Employeeledger requires <a href="https://www.docker.com/">Docker</a> &amp; <a href="https://golang.org/">Go</a> to run.</p>
-<h3><a id="Docker_10"></a>Docker</h3>
-<pre><code class="language-sh">$ sudo apt install docker.io
-$ sudo apt install docker-compose
-</code></pre>
-<h2><a id="Go_15"></a>Go</h2>
-<h4><a id="Installation_16"></a>Installation</h4>
-<pre><code class="language-sh">$ sudo apt-get update
-$ sudo apt-get install golang-go
-</code></pre>
-<h4><a id="Set_your_Go_path_as_environmental_variable_21"></a>Set your Go path as environmental variable</h4>
-<h6><a id="add_these_following_variable_into_the_profile_22"></a>add these following variable into the profile</h6>
-<pre><code class="language-sh">$ <span class="hljs-built_in">export</span> GOPATH=<span class="hljs-variable">$HOME</span>/go
-$ <span class="hljs-built_in">export</span> PATH=<span class="hljs-variable">$PATH</span>:/usr/<span class="hljs-built_in">local</span>/go/bin:<span class="hljs-variable">$GOPATH</span>/bin
-</code></pre>
-<h6><a id="then_27"></a>then</h6>
-<pre><code class="language-sh">$ <span class="hljs-built_in">source</span> ~/.profile
-$ go version
-$ go version go1.<span class="hljs-number">11</span> linux/amd64
-</code></pre>
-<h3><a id="Build_Your_Network_34"></a>Build Your Network</h3>
+## Pre-requisites for Hyperledger Fabric
 
-### [[⬆]](#init) <a name='setup_all'>Set Up Details</a>
+Before setting up this project, ensure you have the following pre-requisites installed:
 
-```
-Working Dir : test-net
-```
+- [Docker](https://docs.docker.com/engine/install/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Go Programming Language (version >= 1.20)](https://golang.org/doc/install)
+- [Node.js (version >= 12.x)](https://nodejs.org/en/download/)
+- [npm](https://www.npmjs.com/get-npm)
+- [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
-Install the hyperledger pre-requisites.
+For detailed installation instructions of HyperLedger -Fabric, refer to the [Hyperledger Fabric documentation](https://hyperledger-fabric.readthedocs.io/en/latest/getting_started.html).
 
-* [Getting Started](https://hyperledger-fabric.readthedocs.io/en/latest/getting_started.html)
+## Description
 
-First Install these dependencies. This includes ```git```, ```curl```, ```wget```, ```golang```,```docker``` & ```docker-compose```.
-We assume that you will be using ```golang``` as the primary language for developing the chaincode.
+This repository contains the following folder:
 
-* [Pre-requisite Installs]([https://hyperledger-fabric.readthedocs.io/en/release-2.0/prereqs.html](https://hyperledger-fabric.readthedocs.io/en/latest/prereqs.html])
+1. `Blockchain_frontend` - Contains frontend part of the application
+2. `borderpay` - it contains chaincodes and API-server in `rest-api-go` folder
+3. `CS731_Project_Report` - It contains Project Report 
 
-Next we install the hyperledger binaries and the docker images.
+## Frontend Installation
 
-* [Install Samples, Binaries and Docker Images]([(https://hyperledger-fabric.readthedocs.io/en/latest/install.html])
+To install and run the frontend, follow these steps:
 
-Check if the dependcies have been met. Shown below is an output for the versions installed in the setup. Setup the ```GOPATH``` appropriately.
+1. Clone the repository:
 
-* [Setting GOPATH](https://github.com/golang/go/wiki/SettingGOPATH)
+   ```bash
+   git clone https://github.com/havibohra/BorderPay.Io.git
+   ```
 
-* [USING GO11MODULE](https://dev.to/maelvls/why-is-go111module-everywhere-and-everything-about-go-modules-24k)
+2. Navigate to the frontend directory:
 
-```bash
-➜  ~ git --version
-git version 2.20.1
+   ```bash
+   cd frontend
+   ```
 
-➜  ~ go version
-go version go1.12.10 linux/amd64
+3. Install dependencies:
 
-➜  ~ node -v
-v12.13.1
+   ```bash
+   npm install
+   ```
 
-➜  ~ npm -v
-6.12.1
+4. Start the frontend server:
 
-➜  ~ python --version
-Python 2.7.17
+   ```bash
+   npm start
+   ```
+5.Access the application in your browser at `http://localhost:3000`.
+## Setup Details
 
-➜  ~ python3 --version
-Python 3.7.5
-
-➜  ~ pip --version
-pip 19.2.3 from /usr/local/lib/python2.7/dist-packages/pip (python 2.7)
-
-➜  ~ pip3 --version
-pip 18.1 from /usr/lib/python3/dist-packages/pip (python 3.7)
-
-➜  ~ curl --version
-curl 7.65.3 (x86_64-pc-linux-gnu) libcurl/7.65.3 OpenSSL/1.1.1c zlib/1.2.11 libidn2/2.2.0 libpsl/0.20.2 (+libidn2/2.0.5) libssh/0.9.0/openssl/zlib nghttp2/1.39.2 librtmp/2.3
-Release-Date: 2019-07-19
-Protocols: dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtmp rtsp scp sftp smb smbs smtp smtps telnet tftp
-Features: AsynchDNS GSS-API HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM NTLM_WB PSL SPNEGO SSL TLS-SRP UnixSockets
-
-
-➜  ~ wget --version
-GNU Wget 1.20.3 built on linux-gnu.
-
-
-<br>
-
-<h3>REST APIs end points</h3>
-
-
-</code></pre>
+Follow these steps to set up and run the project:
