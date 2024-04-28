@@ -1,10 +1,4 @@
 # BorderPay.Io
-<h1>gorestledger</h1>
-<p>     <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Deeptiman/gorestledger">  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/Deeptiman/gorestledger"> <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/Deeptiman/gorestledger"></p>
-<p><a href="https://www.hyperledger.org/projects/fabric"><img src="https://www.hyperledger.org/wp-content/uploads/2016/09/logo_hl_new.png" alt="N|Solid"></a></p>
-<p>GoRestLedger is a REST based API implementation written in Go language to demonstrate the Hyperledger Fabric Blockchain framework. The project repo has been designed to upload employee records into the blockchain and also has the functionality to update, delete the record stored securely in the Hyperledger framework.</p>
-
-<p> However, this explanation guide does not explain how Hyperledger Fabric works, so for the information, you can follow at <a href="https://www.hyperledger.org/projects/fabric">Hyperledger.</a> </p>
 
 <h4><a id="Installation_6"></a>Installation</h4>
 <p>Employeeledger requires <a href="https://www.docker.com/">Docker</a> &amp; <a href="https://golang.org/">Go</a> to run.</p>
@@ -28,104 +22,67 @@ $ go version
 $ go version go1.<span class="hljs-number">11</span> linux/amd64
 </code></pre>
 <h3><a id="Build_Your_Network_34"></a>Build Your Network</h3>
-<p>This sample Hyperledger Fabric blockchain network is built on a single organization consisting of two peer nodes. There are few prerequisites to follow to set up and install a blockchain network in the docker container.</p>
-<h5><a id="Prerequisites_38"></a>Prerequisites</h5>
-<ul>
-<li>There are few binaries needs to be download to create the network.</li>
-<li>These binaries contains various commands to setup , install and execute contains written in .yaml file.</li>
-<li>Command Reference Guide : <a href="https://hyperledger-fabric.readthedocs.io/en/release-1.4/command_ref.html">https://hyperledger-fabric.readthedocs.io/en/release-1.4/command_ref.html</a></li>
-</ul>
-<h6><a id="You_can_choose_any_of_the_following_link_based_on_you_operating_system_and_hardware_architecture_of_your_system_43"></a>You can choose any of the following link based on you operating system and hardware architecture of your system.</h6>
-<table class="table table-striped table-bordered">
-<thead>
-<tr>
-<th>Arch</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric/hyperledger-fabric/linux-amd64-1.0.5/hyperledger-fabric-linux-amd64-1.0.5.tar.gz">Linux AMD 64</a></td>
-</tr>
-<tr>
-<td><a href="https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric/hyperledger-fabric/linux-s390x-1.0.5/hyperledger-fabric-linux-s390x-1.0.5.tar.gz">Linux s390x</a></td>
-</tr>
-<tr>
-<td><a href="https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric/hyperledger-fabric/linux-ppc64le-1.0.5/hyperledger-fabric-linux-ppc64le-1.0.5.tar.gz">Linux PPC64le</a></td>
-</tr>
-<tr>
-<td><a href="https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric/hyperledger-fabric/windows-amd64-1.0.5/hyperledger-fabric-windows-amd64-1.0.5.tar.gz">Windows AMD 64</a></td>
-</tr>
-<tr>
-<td><a href="https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric/hyperledger-fabric/darwin-amd64-1.0.5/hyperledger-fabric-darwin-amd64-1.0.5.tar.gz">Darwin AMD 64</a></td>
-</tr>
-</tbody>
-</table>
-<h5><a id="Configuration_53"></a>Configuration</h5>
-<p>There are few configuration files is written, which composed of various configuration details of a network like Certificate Authority (CA), Peer , Orderer , CouchDB.</p>
-<h5><a id="cryptoconfigyaml_57"></a>crypto-config.yaml</h5>
-<p>This configuration file will generate few certificates and key for the organization and it’s related entities like peers, admin, orderer. The cryptogen binary will take the config file as input and after execution, it will create a crypto-config folder in the config directory, which will contains all the generated certificates and key.</p>
-<pre><code>./bin/cryptogen generate --config=./crypto-config.yaml
-</code></pre>
-<h5><a id="configtxyaml_62"></a>configtx.yaml</h5>
-<p>This config file will contains complete details of a channel related to an organization. It will create three artifacts for a network.</p>
-<ul>
-<li>
-<h6><a id="orderergenesisblock__This_will_initialize_the_Fabrics_orderer_65"></a>orderer.genesis.block : This will initialize the Fabric’s orderer</h6>
-<pre><code>  ./bin/configtxgen -profile GoRestLedger -outputBlock ./artifacts/orderer.genesis.block
-</code></pre>
-</li>
-<li>
-<h6><a id="channeltx__Channel_is_a_private_network_between_peers_to_communicate_in_a_network_66"></a>gorestledger.channel.tx : Channel is a private network between peers to communicate in a network</h6>
-<pre><code>  ./bin/configtxgen -profile GoRestLedger -outputCreateChannelTx ./artifacts/gorestledger.channel.tx -channelID gorestledger
-</code></pre>
-</li>    
-<li>
-<h6><a id="org1employeeledgeranchorstx__This_artifact_will_allow_the_peers_to_interact_with_each_other_in_a_network_68"></a>org1.employeeledger.anchors.tx : This artifact will allow the peers to interact with each other in a network.</h6>
-<pre><code>  ./bin/configtxgen -profile GoRestLedger -outputAnchorPeersUpdate ./artifacts/org1.gorestledger.anchors.tx -channelID gorestledger -asOrg GoRestLedgerOrganization1
-</code></pre>
-</li>
-</ul>
-<h6><a id="You_can_find_a_shell_script_configsh_in_the_fixtures_folder_it_will_generate_all_the_prerequisites_configurations_of_a_network_So_you_can_directly_execute_script_to_skip_all_the_manual_steps_72"></a>You can find a shell script &quot;<a href="http://config.sh">config.sh</a>&quot; in the fixtures folder, it will generate all the prerequisites configurations of a network. So, you can directly execute script to skip all the manual steps.</h6>
-<h5><a id="DockerCompose_75"></a>Docker-Compose</h5>
-<p>Now, we need to deploy the configuration details into a docker container, so we need to use Docker Compose. There will docker-compose.yaml configuration file, which will contain all config details for Orderer, Certificate Authority, Peer, Couch DB.</p>
-<ul>
-<li>
-<p>The compose file can be deploy into a network, by executing following command</p>
-<pre><code> docker-compose up -d // the docker-compose.yaml has to be located at same command location
-</code></pre>
-</li>
-</ul>
-<h6><a id="And_also_replace_the_newly_generated_CA_key_which_can_be_found_at_cryptoconfigpeerOrganizationsorg1employeeledgercomcasome_random_generated_sk_file_at_the_dockercomposeyaml__line_44_50__55_82"></a>And also replace the newly generated CA key, which can be found at crypto-config/peerOrganizations/org1.employee.ledger.com/ca/some random generated sk file, at the docker-compose.yaml : line 44, 50 &amp; 55</h6>
-<p>So, all done , your blockchain network is now deployed into a docker container.</p>
-<p>You can check by executing following command</p>
-<pre><code>docker ps
-</code></pre>
 
-<h4>Dependency Issues</h4>
-<ol>
-   <li>
-      Hyperledger fabric-sdk-go is still in development. If you do dep ensure for each <b>Gopkg.toml</b> in <b>gorestledger</b> and <b>Chaincode</b>, it will download the govendor folder for each module but it will have some compilation issues while building the project. I have corrected the error for both <b>gorestledger and Chaincode</b> folder.
-   </li>
-   <li>
-   Please download the vendor folder and add it in your project repo.   
-      
-   gorestledger - https://www.dropbox.com/s/ry1jmw0y9xliose/vendor.zip?dl=0
-   
-   Chaincode - https://www.dropbox.com/s/31nnqflpqwaywoa/vendor.zip?dl=0
-   </li>
-   <li>
-   <b>Add vendor folders at the location where Gopkg.toml file is located.</b>
-   </li>
-</ol>
+### [[⬆]](#init) <a name='setup_all'>Set Up Details</a>
 
-<h4><a id="Run_the_application_90"></a>Run the application</h4>
-<ul>
-<li>As you have sucssefully deployed your blockchain network. Now you can run the application.</li>
-<li>There is a master Makefile , you can find in the project root directory.</li>
-<li>Just type “make” in the command line and it will take few minuetes to start the server.</li>
-<li>If all goes well, you can see server running at port 4000</li>
-<li>Now, you can use postman to test the APIs at <a href="http://localhost:6000">http://localhost:6000</a></li>
-</ul>
+```
+Working Dir : test-net
+```
+
+Install the hyperledger pre-requisites.
+
+* [Getting Started](https://hyperledger-fabric.readthedocs.io/en/latest/getting_started.html)
+
+First Install these dependencies. This includes ```git```, ```curl```, ```wget```, ```golang```,```docker``` & ```docker-compose```.
+We assume that you will be using ```golang``` as the primary language for developing the chaincode.
+
+* [Pre-requisite Installs]([https://hyperledger-fabric.readthedocs.io/en/release-2.0/prereqs.html](https://hyperledger-fabric.readthedocs.io/en/latest/prereqs.html])
+
+Next we install the hyperledger binaries and the docker images.
+
+* [Install Samples, Binaries and Docker Images]([(https://hyperledger-fabric.readthedocs.io/en/latest/install.html])
+
+Check if the dependcies have been met. Shown below is an output for the versions installed in the setup. Setup the ```GOPATH``` appropriately.
+
+* [Setting GOPATH](https://github.com/golang/go/wiki/SettingGOPATH)
+
+* [USING GO11MODULE](https://dev.to/maelvls/why-is-go111module-everywhere-and-everything-about-go-modules-24k)
+
+```bash
+➜  ~ git --version
+git version 2.20.1
+
+➜  ~ go version
+go version go1.12.10 linux/amd64
+
+➜  ~ node -v
+v12.13.1
+
+➜  ~ npm -v
+6.12.1
+
+➜  ~ python --version
+Python 2.7.17
+
+➜  ~ python3 --version
+Python 3.7.5
+
+➜  ~ pip --version
+pip 19.2.3 from /usr/local/lib/python2.7/dist-packages/pip (python 2.7)
+
+➜  ~ pip3 --version
+pip 18.1 from /usr/lib/python3/dist-packages/pip (python 3.7)
+
+➜  ~ curl --version
+curl 7.65.3 (x86_64-pc-linux-gnu) libcurl/7.65.3 OpenSSL/1.1.1c zlib/1.2.11 libidn2/2.2.0 libpsl/0.20.2 (+libidn2/2.0.5) libssh/0.9.0/openssl/zlib nghttp2/1.39.2 librtmp/2.3
+Release-Date: 2019-07-19
+Protocols: dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtmp rtsp scp sftp smb smbs smtp smtps telnet tftp
+Features: AsynchDNS GSS-API HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM NTLM_WB PSL SPNEGO SSL TLS-SRP UnixSockets
+
+
+➜  ~ wget --version
+GNU Wget 1.20.3 built on linux-gnu.
+
 
 <br>
 
@@ -133,6 +90,3 @@ $ go version go1.<span class="hljs-number">11</span> linux/amd64
 
 
 </code></pre>
-
-<h2>License</h2>
-<p>This project is licensed under the <a href="https://github.com/Deeptiman/gorestledger/blob/master/LICENSE">MIT License</a></p>
