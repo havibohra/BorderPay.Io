@@ -450,3 +450,25 @@ func (s *SmartContract) UpdateContract(ctx contractapi.TransactionContextInterfa
 	}
 	return ctx.GetStub().PutPrivateData("ContractsCollection", id_of_Contract, coJson)
 }
+
+// Given user id this function returns the bank details of the user
+func (s *SmartContract) GetBankDetails(ctx contractapi.TransactionContextInterface, id string) ([]User, error) {
+	fmt.Println("Inside GetBankDetails")
+	var users []User
+	userJSON, err := ctx.GetStub().GetPrivateData("UsersCollection", id)
+	if err != nil {
+		return nil, err
+	}
+	if userJSON == nil {
+		fmt.Println("No such user present")
+		return nil, fmt.Errorf("no such user present")
+	}
+	var user User
+	err = json.Unmarshal(userJSON, &user)
+	if err != nil {
+		fmt.Println("Error in unmarshalling user data")
+		return nil, err
+	}
+	users = append(users, user)
+	return users, nil
+}

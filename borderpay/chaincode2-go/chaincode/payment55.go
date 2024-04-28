@@ -16,10 +16,10 @@ type SmartContract struct {
 }
 
 type Account struct {
-	Account_No string `json:"Account_No"`
-	Bank_Name  string `json:"Bank_Name"`
-	Balance    float64    `json:"Balance"`
-	Currency   string `json:"Currency"`
+	Account_No string  `json:"Account_No"`
+	Bank_Name  string  `json:"Bank_Name"`
+	Balance    float64 `json:"Balance"`
+	Currency   string  `json:"Currency"`
 }
 
 type Bank struct {
@@ -31,13 +31,13 @@ type Bank struct {
 }
 
 type Transaction struct {
-	Transaction_ID  string `json:"Transaction_ID"`
-	Sender_Bank     string `json:"Sender_Bank"`
-	Sender_Acc_No   string `json:"Sender_Acc_No"`
-	Receiver_Bank   string `json:"Receiver_Bank"`
-	Receiver_Acc_No string `json:"Receiver_Acc_No"`
-	Amount          float64    `json:"Amount"`
-	Currency        string `json:"Currency"`
+	Transaction_ID  string  `json:"Transaction_ID"`
+	Sender_Bank     string  `json:"Sender_Bank"`
+	Sender_Acc_No   string  `json:"Sender_Acc_No"`
+	Receiver_Bank   string  `json:"Receiver_Bank"`
+	Receiver_Acc_No string  `json:"Receiver_Acc_No"`
+	Amount          float64 `json:"Amount"`
+	Currency        string  `json:"Currency"`
 }
 
 func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) error {
@@ -219,8 +219,8 @@ func (s *SmartContract) CreateAccount(ctx contractapi.TransactionContextInterfac
 
 func execute(ctx contractapi.TransactionContextInterface, src Bank, src_bank_acc_no string, receiver Bank, receiver_bank_acc_no string, amount float64, rate float64 /*conversion b/w curr*/) (string, error) { //executes transactions after all checks are done
 	//Adding amount to receiver's Account
-	fmt.Printf("The src bank is %s\n",src.Bank_Name)
-	fmt.Printf("The src bank is %s\n",receiver.Bank_Name)
+	fmt.Printf("The src bank is %s\n", src.Bank_Name)
+	fmt.Printf("The src bank is %s\n", receiver.Bank_Name)
 	account_rec := receiver.Account_Map[receiver_bank_acc_no]
 	account_rec.Balance += (float64(amount) * rate)
 	receiver.Account_Map[receiver_bank_acc_no] = account_rec
@@ -229,7 +229,7 @@ func execute(ctx contractapi.TransactionContextInterface, src Bank, src_bank_acc
 	account_send.Balance -= amount
 	src.Account_Map[src_bank_acc_no] = account_send
 
-	fmt.Printf("The value of rc %f\n",src.Account_Map[src_bank_acc_no].Balance)
+	fmt.Printf("The value of rc %f\n", src.Account_Map[src_bank_acc_no].Balance)
 	//Updating changes in world state
 	srcJSON, err := json.Marshal(src)
 	if err != nil {
@@ -288,8 +288,8 @@ func execute(ctx contractapi.TransactionContextInterface, src Bank, src_bank_acc
 
 func (s *SmartContract) MakePayment(ctx contractapi.TransactionContextInterface, src_bank string, src_bank_acc_no string, receiver_bank string, receiver_bank_acc_no string, amount float64) (string, error) {
 	// checking sender's account details
-	if amount<0{
-		return "",fmt.Errorf("-ve transactions not allowed")
+	if amount < 0 {
+		return "", fmt.Errorf("-ve transactions not allowed")
 	}
 	src_bank_JSON, err := ctx.GetStub().GetPrivateData("Bank_Collections", src_bank)
 	if err != nil {
@@ -343,15 +343,15 @@ func (s *SmartContract) MakePayment(ctx contractapi.TransactionContextInterface,
 	// var curr_receiver string = receiver.Currency
 	var balance = src.Account_Map[src_bank_acc_no].Balance
 	if src.Currency == receiver.Currency {
-		if amount<0{
-			return "",fmt.Errorf("-ve transactions not allowed")
+		if amount < 0 {
+			return "", fmt.Errorf("-ve transactions not allowed")
 		}
 		if balance < amount {
 			return "", fmt.Errorf("insufficient Balance in Sender's Account")
 		} else {
 			var trans string
 			//first I am sending from src bank to central bank all amt.
-			if curr_src=="USD"{
+			if curr_src == "USD" {
 				boa_JSON, err := ctx.GetStub().GetPrivateData("Bank_Collections", "BOA")
 				if err != nil {
 					return "", fmt.Errorf("failed to connect to america's central bank.%s: %v", "BOA", err)
@@ -362,17 +362,17 @@ func (s *SmartContract) MakePayment(ctx contractapi.TransactionContextInterface,
 					return "", fmt.Errorf("failed to unmarshal bank %s details : %v", "boa", err)
 				}
 
-				_,err=execute(ctx,src,src_bank_acc_no,boa,"1",amount,1)
+				_, err = execute(ctx, src, src_bank_acc_no, boa, "1", amount, 1)
 				if err != nil {
-					return "", fmt.Errorf("failed to execute transaction from %s to boa : %v",src_bank, err)
+					return "", fmt.Errorf("failed to execute transaction from %s to boa : %v", src_bank, err)
 				}
-				var new_amt float64=amount*(1-.1);
-				trans,err=execute(ctx,boa,"1",receiver,receiver_bank_acc_no,new_amt,1)
+				var new_amt float64 = amount * (1 - .1)
+				trans, err = execute(ctx, boa, "1", receiver, receiver_bank_acc_no, new_amt, 1)
 				if err != nil {
-					return "", fmt.Errorf("failed to execute transaction from boa to %s : %v",receiver_bank, err)
+					return "", fmt.Errorf("failed to execute transaction from boa to %s : %v", receiver_bank, err)
 				}
-				return trans,nil
-			}else{
+				return trans, nil
+			} else {
 				rbi_JSON, err := ctx.GetStub().GetPrivateData("Bank_Collections", "RBI")
 				if err != nil {
 					return "", fmt.Errorf("failed to connect to india's central bank.%s: %v", "rbi", err)
@@ -384,27 +384,27 @@ func (s *SmartContract) MakePayment(ctx contractapi.TransactionContextInterface,
 				}
 
 				_, err = execute(ctx, src, src_bank_acc_no, rbi, "1", amount, 1)
-				
+
 				if err != nil {
 					return "", fmt.Errorf("failed to execute transaction from %s to rbi : %v", src_bank, err)
 				}
 				fmt.Printf("New_amt is:1\n")
 
 				var new_amt float64 = amount * (1.0 - .1)
-				fmt.Printf("New_amt is %f\n",new_amt)
+				fmt.Printf("New_amt is %f\n", new_amt)
 				trans, err = execute(ctx, rbi, "1", receiver, receiver_bank_acc_no, new_amt, 1)
-				
+
 				if err != nil {
 					return "", fmt.Errorf("failed to execute transaction from boa to %s : %v", receiver_bank, err)
 				}
 				fmt.Printf("New_amt is:3\n")
-				return trans,nil
+				return trans, nil
 			}
 		}
 	} else {
 		if curr_src == "USD" {
-			if amount<0{
-				return "",fmt.Errorf("-ve transactions not allowed")
+			if amount < 0 {
+				return "", fmt.Errorf("-ve transactions not allowed")
 			}
 			if balance < amount {
 				return "", fmt.Errorf("insufficient Balance in Sender's Account")
@@ -437,7 +437,7 @@ func (s *SmartContract) MakePayment(ctx contractapi.TransactionContextInterface,
 				if err != nil {
 					return "", err
 				}
-				amount=amount*(1-.01);
+				amount = amount * (1 - .01)
 				rbi_JSON, err := ctx.GetStub().GetPrivateData("Bank_Collections", "RBI")
 				if err != nil {
 					return "", fmt.Errorf("failed to connect to india's central bank.%s: %v", "RBI", err)
@@ -451,8 +451,8 @@ func (s *SmartContract) MakePayment(ctx contractapi.TransactionContextInterface,
 				if err != nil {
 					return "", err
 				}
-				amount=amount*80;
-				amount=amount*(1-.1)
+				amount = amount * 80
+				amount = amount * (1 - .1)
 				rec_JSON, err := ctx.GetStub().GetPrivateData("Bank_Collections", receiver_bank)
 				if err != nil {
 					return "", fmt.Errorf("failed to connect to .%s: %v", receiver_bank, err)
@@ -503,7 +503,7 @@ func (s *SmartContract) MakePayment(ctx contractapi.TransactionContextInterface,
 				if err != nil {
 					return "", err
 				}
-				amount/=80;
+				amount /= 80
 				boa_JSON, err := ctx.GetStub().GetPrivateData("Bank_Collections", "BOA")
 				if err != nil {
 					return "", fmt.Errorf("failed to connect to america's central bank.%s: %v", "BOA", err)
@@ -513,7 +513,7 @@ func (s *SmartContract) MakePayment(ctx contractapi.TransactionContextInterface,
 				if err != nil {
 					return "", fmt.Errorf("failed to unmarshal bank %s details : %v", "boa", err)
 				}
-				amount = amount * ((1 - .01))
+				amount = amount * (1 - .01)
 				_, err = execute(ctx, exchange, "1", boa, "1", amount, 1)
 				if err != nil {
 					return "", err
@@ -529,7 +529,7 @@ func (s *SmartContract) MakePayment(ctx contractapi.TransactionContextInterface,
 					return "", fmt.Errorf("failed to unmarshal bank %s details : %v", receiver_bank, err)
 				}
 				var trans_8 string
-				amount = amount * ((1 - .1))
+				amount = amount * (1 - .1)
 				trans_8, err = execute(ctx, boa, "1", temp, receiver_bank_acc_no, amount, 1)
 				if err != nil {
 					return "", err
@@ -539,4 +539,27 @@ func (s *SmartContract) MakePayment(ctx contractapi.TransactionContextInterface,
 		}
 	}
 	return "", nil
+}
+
+func (s *SmartContract) ViewBalance(ctx contractapi.TransactionContextInterface, bank_name string, acc_no string) (float64, error) {
+	bankJSON, err := ctx.GetStub().GetPrivateData("Bank_Collections", bank_name)
+	if err != nil {
+		return 0, fmt.Errorf("failed to get bank details: %v", err)
+	}
+	if bankJSON == nil {
+		return 0, fmt.Errorf("bank %s does not exist", bank_name)
+	}
+
+	var bank Bank
+	err = json.Unmarshal(bankJSON, &bank)
+	if err != nil {
+		return 0, fmt.Errorf("failed to unmarshal bank details: %v", err)
+	}
+
+	account, ok := bank.Account_Map[acc_no]
+	if !ok {
+		return 0, fmt.Errorf("account %s does not exist in bank %s", acc_no, bank_name)
+	}
+
+	return account.Balance, nil
 }
