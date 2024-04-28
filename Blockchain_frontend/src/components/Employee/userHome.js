@@ -5,25 +5,26 @@ import UserNavbar from './userNavbar.js';
 import axios from 'axios';
 import "./contracts.css"
 import toast from "react-hot-toast";
+import ShowBalance from '../Employer/showBalance.js';
 const UserHome = () => {
   const {userId, setUserId} = useContext(Context);
   
   const  logeduserid = window.localStorage.getItem("userId");
   const [createdContracts, setCreatedContracts] = useState([
-    {
-      ContractID: "contractId",
-      EmployerId: "employerId",
-      EmployeeId: "employeeId",
-      Payment: 1000,
-      Duration: 12,
-      BankName_Employer: "employerBankName",
-      BankAccountNumber_Employer: "employerBankAccountNumber",
-      BankName_Employee: "employeeBankName",
-      BankAccountNumber_Employee: "employeeBankAccountNumber",
-      STATUS: "active",
-      Last_Payment_Date: "2022-01-01",
-      All_Transactions: []
-    }
+    // {
+    //   ContractID: "contractId",
+    //   EmployerId: "employerId",
+    //   EmployeeId: "employeeId",
+    //   Payment: 1000,
+    //   Duration: 12,
+    //   BankName_Employer: "employerBankName",
+    //   BankAccountNumber_Employer: "employerBankAccountNumber",
+    //   BankName_Employee: "employeeBankName",
+    //   BankAccountNumber_Employee: "employeeBankAccountNumber",
+    //   STATUS: "active",
+    //   Last_Payment_Date: "2022-01-01",
+    //   All_Transactions: []
+    // }
   ]);
 
   const handleRevoke = async (contract_id) => {
@@ -69,6 +70,7 @@ const UserHome = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        
         const response = await axios.get('http://localhost:3002/query', {
           params: {
           'channelid': 'mychannel',
@@ -96,6 +98,8 @@ const UserHome = () => {
   return (
     <div>
       <UserNavbar />
+      <ShowBalance logeduserid={logeduserid} />
+
       <h1 style={{textAlign: 'center'}}>Your Contracts</h1>
       {
       

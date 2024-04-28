@@ -6,41 +6,77 @@ import "../Employee/contracts.css";
 import { Context } from '../..';
 import CreateContract from './createContract';
 import toast from "react-hot-toast";
+import ShowBalance from './showBalance';
 const AdminHome = () => {
 
   const  logeduserid = window.localStorage.getItem("userId");
+  const [bankName , setbankName] = useState("");
+  const [bankAccountNumber , setbankAccountNumber] = useState("");
 
   const {userId, setUserId} = useContext(Context);
+
   const [createdContracts, setCreatedContracts] = useState([
-    {
-      ContractID: "contractId",
-      EmployerId: "employerId",
-      EmployeeId: "employeeId",
-      Payment: 1000,
-      Duration: 12,
-      BankName_Employer: "employerBankName",
-      BankAccountNumber_Employer: "employerBankAccountNumber",
-      BankName_Employee: "employeeBankName",
-      BankAccountNumber_Employee: "employeeBankAccountNumber",
-      STATUS: "active",
-      Last_Payment_Date: "2022-01-01",
-      All_Transactions: []
-    },{
-      ContractID: "contractId",
-      EmployerId: "employerId",
-      EmployeeId: "employeeId",
-      Payment: 1000,
-      Duration: 12,
-      BankName_Employer: "employerBankName",
-      BankAccountNumber_Employer: "employerBankAccountNumber",
-      BankName_Employee: "employeeBankName",
-      BankAccountNumber_Employee: "employeeBankAccountNumber",
-      STATUS: "active",
-      Last_Payment_Date: "2022-01-01",
-      All_Transactions: []
-    }
+    // {// {
+    // //   ContractID: "contractId",
+    // //   EmployerId: "employerId",
+    // //   EmployeeId: "employeeId",
+    // //   Payment: 1000,
+    // //   Duration: 12,
+    // //   BankName_Employer: "employerBankName",
+    // //   BankAccountNumber_Employer: "employerBankAccountNumber",
+    // //   BankName_Employee: "employeeBankName",
+    // //   BankAccountNumber_Employee: "employeeBankAccountNumber",
+    // //   STATUS: "active",
+    // //   Last_Payment_Date: "2022-01-01",
+    // //   All_Transactions: []
+    // },{
+    //   ContractID: "contractId",
+    //   EmployerId: "employerId",
+    //   EmployeeId: "employeeId",
+    //   Payment: 1000,
+    //   Duration: 12,
+    //   BankName_Employer: "employerBankName",
+    //   BankAccountNumber_Employer: "employerBankAccountNumber",
+    //   BankName_Employee: "employeeBankName",
+    //   BankAccountNumber_Employee: "employeeBankAccountNumber",
+    //   STATUS: "active",
+    //   Last_Payment_Date: "2022-01-01",
+    //   All_Transactions: []
+    // }
   ]);
   const [flag , setFlag] = useState(true);
+
+
+  const banckdetails = async () => {
+    // try {
+      
+
+      const response = await axios.get('http://localhost:3002/query', {
+        params: {
+        'channelid': 'mychannel',
+        'chaincodeid': 'basictest',
+        'function': 'GetBankDetails',
+        'args': logeduserid
+        }
+      });
+      
+      console.log(response);
+      console.log("this " , response.data);
+
+      // const substring = response.data.substring(10);
+      // const jsonData = JSON.parse(substring);
+      
+      // console.log(jsonData);
+      
+
+
+    // } catch (error) {
+    //   toast.error("Error fetching contracts");
+    //   console.error('Error fetching contracts:', error);
+    // }
+  };
+  banckdetails();
+
 
   const handlePayment = async (b1,bn1,b2,bn2,pay) => {
     try {
@@ -87,6 +123,9 @@ const AdminHome = () => {
     }
   };
 
+
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -102,12 +141,14 @@ const AdminHome = () => {
         });
         
         console.log(response);
-        
+        console.log("this" , response.data);
+
         const substring = response.data.substring(10);
         const jsonData = JSON.parse(substring);
+        
         setCreatedContracts(jsonData);
-        //const response = await axios.get('https://example.com/api/contracts', userId);
-        //setCreatedContracts(response.data);
+
+
       } catch (error) {
         toast.error("Error fetching contracts");
         console.error('Error fetching contracts:', error);
@@ -129,6 +170,9 @@ const AdminHome = () => {
     <div>
     <AdminNavbar/>
     <CreateContract/>
+    <hr/>
+    <ShowBalance logeduserid={logeduserid} />
+
     <hr />
     <h1 style={{textAlign: 'center'}}>Your Contracts</h1>
     {flag ? createdContracts.map((contract,index) => (

@@ -30,7 +30,8 @@ const AdminNavbar = () => {
           <div className="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
             <ul className="navbar-nav ml-auto">
               
-              
+            
+
               <li className="nav-item">
                 <NavLink className="nav-link active" aria-current="page" to="/">
                 <h5 style={{fontFamily: 'Helvetica Neue', marginTop: '5px'}}>Logout</h5> 

@@ -17,6 +17,8 @@ import axios from "axios";
 const Signup = () => {
   const [userId, setUserID] = useState("");
   const [bankName, setBankName] = useState("");
+  const [currency, setCurrency] = useState("");
+
   const [bankAccountNumber, setBankAccountNumber] = useState("");
   const [password, setPassword] = useState("");
   const [usertype, setUsertype] = useState();
@@ -24,6 +26,21 @@ const Signup = () => {
   
   const { isAuthenticated, setIsAuthenticated, loading, setLoading } =
   useContext(Context);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -60,8 +77,38 @@ const Signup = () => {
             ['args', bankAccountNumber],
             ['args', usertype]
           ])
+
+
         );
         
+        console.log("hello this is signup", data.data);
+
+
+        if(bankName==="PNB" || bankName==="SBI"){
+          setCurrency("INR");
+        }
+        else{
+          setCurrency("USD");
+        }
+
+        const bankAccountCreation = await axios.post(
+          'http://localhost:3002/invoke',
+          new URLSearchParams([
+            ['', ''],
+            ['channelid', 'mychannel'],
+            ['chaincodeid', 'paytest'],
+            ['function', 'CreateAccount'],
+            ['args', bankName],
+            ['args', currency],
+            ['args', bankAccountNumber] 
+          ])
+
+        );
+        // console.log("hello this is creation bank ", bankAccountCreation.data);
+        console.log("hello this is creation bank ", bankAccountCreation.data);
+        
+        // toast.success(bankAccountCreation.data);
+
         // const data = await axios.get('http://localhost:3002/query', {
         // params: {
         //   'channelid': 'mychannel',
@@ -72,6 +119,8 @@ const Signup = () => {
         // });
         console.log(data);
         toast.success("Signup succesful");
+        window.localStorage.setItem("userId", userId);
+
         setIsAuthenticated(true);
         setLoading(false);
       } catch (error) {
