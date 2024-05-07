@@ -1,13 +1,5 @@
 import React, { useContext, useState } from "react";
 import Navbar from "./navbar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUser,
-  faHashtag,
-  faLock,
-  faEnvelope,
-  faCircleUser,
-} from "@fortawesome/free-solid-svg-icons";
 import { Link, Navigate } from "react-router-dom";
 import "./form.css";
 import { Context } from "../..";
@@ -26,21 +18,6 @@ const Signup = () => {
   
   const { isAuthenticated, setIsAuthenticated, loading, setLoading } =
   useContext(Context);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -117,7 +94,7 @@ const Signup = () => {
         //   // 'args': 'Asset123'
         // }
         // });
-        console.log(data);
+        // console.log(data);
         toast.success("Signup succesful");
         window.localStorage.setItem("userId", userId);
 

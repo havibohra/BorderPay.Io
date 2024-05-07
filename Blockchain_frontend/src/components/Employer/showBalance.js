@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { json } from 'react-router-dom';
 
 const ShowBalance = ({logeduserid}) => {
     const [showBalance, setShowBalance] = useState(false);
     const [balance, setBalance] = useState(null);
-    const [bankname ,setBankName] = useState("");
-    const [accountNumber , setAccoutNumber] = useState(""); 
 
            const fetchBalance = async () => {
             try {
@@ -23,10 +20,6 @@ const ShowBalance = ({logeduserid}) => {
                 console.log("hi response: ", response.data);
                 const substring = response.data.substring(10);
                 const jsonData = JSON.parse(substring);
-
-                // setBankName();
-                // setAccoutNumber(jsonData[0].BankAccountNumber);
-
 
                 //second Api
                 // const response1 = await axios.get('http://localhost:3002/query', {
@@ -56,13 +49,9 @@ const ShowBalance = ({logeduserid}) => {
                 setBalance(jsonData1);
                 // setBankName(jsonData[0].BankName);
                 // setAccoutNumber(jsonData[0].BankAccountNumber);
-
-
- 
                 // setBalance(response.data.balance);
             } catch (error) {
                if(!showBalance)toast.error("balance could not be fetched");
-
 
                 console.error('Failed to fetch balance:', error);
             }

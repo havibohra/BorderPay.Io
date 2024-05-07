@@ -1,13 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Context } from '../../index.js';
-import { Navigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
 import UserNavbar from './userNavbar.js';
 import axios from 'axios';
 import "./contracts.css"
 import toast from "react-hot-toast";
 import ShowBalance from '../Employer/showBalance.js';
 const UserHome = () => {
-  const {userId, setUserId} = useContext(Context);
   
   const  logeduserid = window.localStorage.getItem("userId");
   const [createdContracts, setCreatedContracts] = useState([

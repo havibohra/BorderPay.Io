@@ -1,13 +1,5 @@
 import React, { useContext, useState } from "react";
 import "./form.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUser,
-  faHashtag,
-  faLock,
-  faEnvelope,
-  faCircleUser,
-} from "@fortawesome/free-solid-svg-icons";
 import { Link, Navigate } from "react-router-dom";
 import Navbar from "./navbar";
 import { Context } from "../..";
@@ -58,8 +50,6 @@ const Login = () => {
       // console.log(response.headers);
       setUserId(userid);
       setIsLogined(true);
-      setLoginedUserType();
-      //  setUser(user);
     
       toast.success("login succesful");
     }  catch (error) {

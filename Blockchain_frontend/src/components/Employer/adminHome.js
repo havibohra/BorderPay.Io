@@ -1,20 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AdminNavbar from './adminNavbar'
-import { Navigate } from 'react-router-dom';
 import axios from 'axios';
 import "../Employee/contracts.css";
-import { Context } from '../..';
 import CreateContract from './createContract';
 import toast from "react-hot-toast";
 import ShowBalance from './showBalance';
 const AdminHome = () => {
 
   const  logeduserid = window.localStorage.getItem("userId");
-  const [bankName , setbankName] = useState("");
-  const [bankAccountNumber , setbankAccountNumber] = useState("");
-
-  const {userId, setUserId} = useContext(Context);
-
   const [createdContracts, setCreatedContracts] = useState([
     // {// {
     // //   ContractID: "contractId",
@@ -68,8 +61,6 @@ const AdminHome = () => {
       
       // console.log(jsonData);
       
-
-
     // } catch (error) {
     //   toast.error("Error fetching contracts");
     //   console.error('Error fetching contracts:', error);
@@ -78,7 +69,11 @@ const AdminHome = () => {
   banckdetails();
 
 
-  const handlePayment = async (b1,bn1,b2,bn2,pay) => {
+  const handlePayment = async (b1,bn1,b2,bn2,pay,status) => {
+    if(status === "Pending" || status === "Revoked"){
+      toast.error("Contract is inactive");
+      return;
+    }
     try {
       const response = await axios.post(
         'http://localhost:3002/invoke',
@@ -189,7 +184,7 @@ const AdminHome = () => {
         <button
           className="view-prescription-button"
           id="view-prescription"  
-          onClick={()=>handlePayment(contract.BankName_Employer,contract.BankAccountNumber_Employer,contract.BankName_Employee,contract.BankAccountNumber_Employee,contract.Payment)}
+          onClick={()=>handlePayment(contract.BankName_Employer,contract.BankAccountNumber_Employer,contract.BankName_Employee,contract.BankAccountNumber_Employee,contract.Payment,contract.STATUS)}
           >
           Payment
         </button>
